@@ -1,4 +1,4 @@
-module github.com/GrosbergKirr/proto_contracts/gen/go
+module github.com/GrosbergKirr/proto_contracts
 
 go 1.22.4
 
