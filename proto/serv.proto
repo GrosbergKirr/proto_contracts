@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package serv;
+
+
+option go_package = "github.com/GrosbergKirr/proto_contracts/gen/go/service/v1;servV1";
+
+import "google/api/annotations.proto";
+
+service GatewayService{
+  rpc ChangeHostName (Request) returns (Response){
+    option (google.api.http) = {
+      post: "/v1/changehost"
+      body: "*"
+    };
+  }
+}
+
+message Request{
+  string NewHostName = 1;
+}
+
+message Response{
+  string Result = 1;
+}
