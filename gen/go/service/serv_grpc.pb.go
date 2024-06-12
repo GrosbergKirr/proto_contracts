@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GatewayServiceClient interface {
 	ChangeHostName(ctx context.Context, in *HostRequest, opts ...grpc.CallOption) (*HostResponse, error)
-	DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSRequest, error)
+	DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSResponse, error)
 }
 
 type gatewayServiceClient struct {
@@ -49,9 +49,9 @@ func (c *gatewayServiceClient) ChangeHostName(ctx context.Context, in *HostReque
 	return out, nil
 }
 
-func (c *gatewayServiceClient) DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSRequest, error) {
+func (c *gatewayServiceClient) DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DNSRequest)
+	out := new(DNSResponse)
 	err := c.cc.Invoke(ctx, GatewayService_DNSChange_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *gatewayServiceClient) DNSChange(ctx context.Context, in *DNSRequest, op
 // for forward compatibility
 type GatewayServiceServer interface {
 	ChangeHostName(context.Context, *HostRequest) (*HostResponse, error)
-	DNSChange(context.Context, *DNSRequest) (*DNSRequest, error)
+	DNSChange(context.Context, *DNSRequest) (*DNSResponse, error)
 	mustEmbedUnimplementedGatewayServiceServer()
 }
 
@@ -75,7 +75,7 @@ type UnimplementedGatewayServiceServer struct {
 func (UnimplementedGatewayServiceServer) ChangeHostName(context.Context, *HostRequest) (*HostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangeHostName not implemented")
 }
-func (UnimplementedGatewayServiceServer) DNSChange(context.Context, *DNSRequest) (*DNSRequest, error) {
+func (UnimplementedGatewayServiceServer) DNSChange(context.Context, *DNSRequest) (*DNSResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DNSChange not implemented")
 }
 func (UnimplementedGatewayServiceServer) mustEmbedUnimplementedGatewayServiceServer() {}

@@ -55,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/servDNSRequest"
+              "$ref": "#/definitions/servDNSResponse"
             }
           },
           "default": {
@@ -114,6 +114,14 @@
       "type": "object",
       "properties": {
         "NewHostName": {
+          "type": "string"
+        }
+      }
+    },
+    "servDNSResponse": {
+      "type": "object",
+      "properties": {
+        "Result": {
           "type": "string"
         }
       }

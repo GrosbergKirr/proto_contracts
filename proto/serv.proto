@@ -14,7 +14,7 @@ service GatewayService{
       body: "*"
     };
   }
-  rpc DNSChange (DNSRequest) returns (DNSRequest){
+  rpc DNSChange (DNSRequest) returns (DNSResponse){
     option (google.api.http) = {
       post: "/v1/dnschange"
       body: "*"
