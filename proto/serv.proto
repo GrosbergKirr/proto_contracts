@@ -24,6 +24,8 @@ service GatewayService{
 
 message HostRequest{
   string NewHostName = 1;
+  string Addr = 2;
+  string Password = 3;
 }
 
 message HostResponse{
@@ -31,7 +33,9 @@ message HostResponse{
 }
 
 message DNSRequest{
-  string NewHostName = 1;
+  string NewDNSName = 1;
+  string Addr = 2;
+  string Password = 3;
 }
 
 message DNSResponse{
