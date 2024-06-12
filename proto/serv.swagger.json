@@ -113,7 +113,13 @@
     "servDNSRequest": {
       "type": "object",
       "properties": {
-        "NewHostName": {
+        "NewDNSName": {
+          "type": "string"
+        },
+        "Addr": {
+          "type": "string"
+        },
+        "Password": {
           "type": "string"
         }
       }
@@ -130,6 +136,12 @@
       "type": "object",
       "properties": {
         "NewHostName": {
+          "type": "string"
+        },
+        "Addr": {
+          "type": "string"
+        },
+        "Password": {
           "type": "string"
         }
       }
