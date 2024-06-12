@@ -23,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/servResponse"
+              "$ref": "#/definitions/servHostResponse"
             }
           },
           "default": {
@@ -39,7 +39,39 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/servRequest"
+              "$ref": "#/definitions/servHostRequest"
+            }
+          }
+        ],
+        "tags": [
+          "GatewayService"
+        ]
+      }
+    },
+    "/v1/dnschange": {
+      "post": {
+        "operationId": "GatewayService_DNSChange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/servDNSRequest"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/servDNSRequest"
             }
           }
         ],
@@ -78,7 +110,7 @@
         }
       }
     },
-    "servRequest": {
+    "servDNSRequest": {
       "type": "object",
       "properties": {
         "NewHostName": {
@@ -86,7 +118,15 @@
         }
       }
     },
-    "servResponse": {
+    "servHostRequest": {
+      "type": "object",
+      "properties": {
+        "NewHostName": {
+          "type": "string"
+        }
+      }
+    },
+    "servHostResponse": {
       "type": "object",
       "properties": {
         "Result": {

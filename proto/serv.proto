@@ -8,18 +8,32 @@ option go_package = "github.com/GrosbergKirr/proto_contracts/gen/go/service/v1;s
 import "google/api/annotations.proto";
 
 service GatewayService{
-  rpc ChangeHostName (Request) returns (Response){
+  rpc ChangeHostName (HostRequest) returns (HostResponse){
     option (google.api.http) = {
       post: "/v1/changehost"
       body: "*"
     };
   }
+  rpc DNSChange (DNSRequest) returns (DNSRequest){
+    option (google.api.http) = {
+      post: "/v1/dnschange"
+      body: "*"
+    };
+  }
 }
 
-message Request{
+message HostRequest{
   string NewHostName = 1;
 }
 
-message Response{
+message HostResponse{
+  string Result = 1;
+}
+
+message DNSRequest{
+  string NewHostName = 1;
+}
+
+message DNSResponse{
   string Result = 1;
 }

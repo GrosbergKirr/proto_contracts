@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: proto/serv.proto
 
-package servV1
+package service
 
 import (
 	context "context"
@@ -20,13 +20,15 @@ const _ = grpc.SupportPackageIsVersion8
 
 const (
 	GatewayService_ChangeHostName_FullMethodName = "/serv.GatewayService/ChangeHostName"
+	GatewayService_DNSChange_FullMethodName      = "/serv.GatewayService/DNSChange"
 )
 
 // GatewayServiceClient is the client API for GatewayService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GatewayServiceClient interface {
-	ChangeHostName(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	ChangeHostName(ctx context.Context, in *HostRequest, opts ...grpc.CallOption) (*HostResponse, error)
+	DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSRequest, error)
 }
 
 type gatewayServiceClient struct {
@@ -37,10 +39,20 @@ func NewGatewayServiceClient(cc grpc.ClientConnInterface) GatewayServiceClient {
 	return &gatewayServiceClient{cc}
 }
 
-func (c *gatewayServiceClient) ChangeHostName(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+func (c *gatewayServiceClient) ChangeHostName(ctx context.Context, in *HostRequest, opts ...grpc.CallOption) (*HostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Response)
+	out := new(HostResponse)
 	err := c.cc.Invoke(ctx, GatewayService_ChangeHostName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gatewayServiceClient) DNSChange(ctx context.Context, in *DNSRequest, opts ...grpc.CallOption) (*DNSRequest, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DNSRequest)
+	err := c.cc.Invoke(ctx, GatewayService_DNSChange_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +63,8 @@ func (c *gatewayServiceClient) ChangeHostName(ctx context.Context, in *Request, 
 // All implementations must embed UnimplementedGatewayServiceServer
 // for forward compatibility
 type GatewayServiceServer interface {
-	ChangeHostName(context.Context, *Request) (*Response, error)
+	ChangeHostName(context.Context, *HostRequest) (*HostResponse, error)
+	DNSChange(context.Context, *DNSRequest) (*DNSRequest, error)
 	mustEmbedUnimplementedGatewayServiceServer()
 }
 
@@ -59,8 +72,11 @@ type GatewayServiceServer interface {
 type UnimplementedGatewayServiceServer struct {
 }
 
-func (UnimplementedGatewayServiceServer) ChangeHostName(context.Context, *Request) (*Response, error) {
+func (UnimplementedGatewayServiceServer) ChangeHostName(context.Context, *HostRequest) (*HostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangeHostName not implemented")
+}
+func (UnimplementedGatewayServiceServer) DNSChange(context.Context, *DNSRequest) (*DNSRequest, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DNSChange not implemented")
 }
 func (UnimplementedGatewayServiceServer) mustEmbedUnimplementedGatewayServiceServer() {}
 
@@ -76,7 +92,7 @@ func RegisterGatewayServiceServer(s grpc.ServiceRegistrar, srv GatewayServiceSer
 }
 
 func _GatewayService_ChangeHostName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
+	in := new(HostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -88,7 +104,25 @@ func _GatewayService_ChangeHostName_Handler(srv interface{}, ctx context.Context
 		FullMethod: GatewayService_ChangeHostName_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GatewayServiceServer).ChangeHostName(ctx, req.(*Request))
+		return srv.(GatewayServiceServer).ChangeHostName(ctx, req.(*HostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GatewayService_DNSChange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DNSRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServiceServer).DNSChange(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GatewayService_DNSChange_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServiceServer).DNSChange(ctx, req.(*DNSRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -103,6 +137,10 @@ var GatewayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangeHostName",
 			Handler:    _GatewayService_ChangeHostName_Handler,
+		},
+		{
+			MethodName: "DNSChange",
+			Handler:    _GatewayService_DNSChange_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
